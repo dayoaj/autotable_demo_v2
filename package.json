@@ -16,6 +16,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "installConfig": {
+    "pnp": true
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
