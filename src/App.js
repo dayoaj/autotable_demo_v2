@@ -1,8 +1,12 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { styled } from '@material-ui/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import PropTypes from 'prop-types';
+import Body from './Body';
+import ResponsiveNavBar from './ResponsiveNavBar';
 
-class App extends Component {
+
+function App {
   render() {
     return (
       <div className="App">
