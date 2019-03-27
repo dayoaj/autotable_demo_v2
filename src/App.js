@@ -16,29 +16,36 @@ function App() {
   const [mobOpen, setMobOpen] = useState(false);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [token, setToken] = useState("");
-  
+  const [hasError, setHasError] = useState(false);
+  // const [token, setToken] = useState("");
+
   useEffect(() => {
-    setIsLoading(true);
-    fetch('http://127.0.0.1:8090/api/user',{
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
-      },
-    })
-      .then(response =>{
+    const fetchData = async () => {
+      setIsLoading(true);
+      setHasError(false);
+
+      try {
+        const response = await fetch("http://127.0.0.1:8090/api/user", {
+          headers: {
+            "Content-Type": "application/json"
+            // "x-access-token": token,
+          }
+        });
+
         if (response.ok) {
-          return response.json();
+          setData(response.json().rows);
+          setIsLoading(false);
         } else {
-          throw new Error('Something went wrong...');
+          throw new Error("Error reading Data");
         }
-      })
-      .then(data => {
-        setData(data.rows);
-        setIsLoading(false);
-      })
-      .catch(error => this.setState({ error, isLoading: false}));
+      } catch (error) {
+        setHasError(true);
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, []);
 
   const toggleOpenDrawer = mobOpen => {
@@ -52,17 +59,18 @@ function App() {
   return (
     <MyFragment>
       <CssBaseline />
-      <ResponsiveNavBar
-        mobOpen={mobOpen}
-        toggleOpenDrawer={toggleOpenDrawer}
-      />
-      <Body toggleOpenDrawer={toggleOpenDrawer} data={data} />
+      <ResponsiveNavBar mobOpen={mobOpen} toggleOpenDrawer={toggleOpenDrawer} />
+      {hasError ? (
+        <div>Something went wrong</div>
+      ) : (
+        <Body toggleOpenDrawer={toggleOpenDrawer} data={data} />
+      )}
     </MyFragment>
   );
 }
 
 App.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default App;
