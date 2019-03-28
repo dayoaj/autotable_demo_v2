@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { styled } from "@material-ui/styles";
+import React, { useState, useEffect, Fragment } from "react";
+import { withStyles } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import PropTypes from "prop-types";
 import Body from "./Body";
 import ResponsiveNavBar from "./ResponsiveNavBar";
 
-const MyFragment = styled(React.Fragment)({
+const styles = {
   zIndex: 1,
   overflow: "hidden",
   display: "flex",
   width: "100%"
-});
+};
 
-function App() {
+function App({ classes }) {
   const [mobOpen, setMobOpen] = useState(false);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,15 +57,20 @@ function App() {
   }
 
   return (
-    <MyFragment>
-      <CssBaseline />
-      <ResponsiveNavBar mobOpen={mobOpen} toggleOpenDrawer={toggleOpenDrawer} />
-      {hasError ? (
-        <div>Something went wrong</div>
-      ) : (
-        <Body toggleOpenDrawer={toggleOpenDrawer} data={data} />
-      )}
-    </MyFragment>
+    <Fragment>
+      <div className={classes.root}>
+        <CssBaseline />
+        <ResponsiveNavBar
+          mobOpen={mobOpen}
+          toggleOpenDrawer={toggleOpenDrawer}
+        />
+        {hasError ? (
+          <div>Something went wrong</div>
+        ) : (
+          <Body toggleOpenDrawer={toggleOpenDrawer} data={data} />
+        )}
+      </div>
+    </Fragment>
   );
 }
 
@@ -73,4 +78,4 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default App;
+export default withStyles(styles)(App);
