@@ -1,18 +1,21 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { withStyles } from "@material-ui/styles";
+import React, { useState, useEffect } from "react";
+import { ThemeProvider, makeStyles } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import PropTypes from "prop-types";
 import Body from "./Body";
 import ResponsiveNavBar from "./ResponsiveNavBar";
+import { green, yellow } from "@material-ui/core/colors";
 
-const styles = {
-  zIndex: 1,
-  overflow: "hidden",
-  display: "flex",
-  width: "100%"
-};
+const useStyles = makeStyles({
+  root: {
+    zIndex: 1,
+    overflow: "hidden",
+    display: "flex",
+    width: "100%"
+  }
+});
 
-function App({ classes }) {
+function App() {
+  const classes = useStyles();
   const [mobOpen, setMobOpen] = useState(false);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +60,14 @@ function App({ classes }) {
   }
 
   return (
-    <Fragment>
+    <ThemeProvider
+      theme={{
+        palette: {
+          primary: green,
+          secondary: yellow
+        }
+      }}
+    >
       <div className={classes.root}>
         <CssBaseline />
         <ResponsiveNavBar
@@ -70,12 +80,8 @@ function App({ classes }) {
           <Body toggleOpenDrawer={toggleOpenDrawer} data={data} />
         )}
       </div>
-    </Fragment>
+    </ThemeProvider>
   );
 }
 
-App.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(App);
+export default App;
