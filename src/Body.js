@@ -25,7 +25,7 @@ function Body({ data, toggleOpenDrawer }) {
     <Router>
       <div className={classes.content}>
         <TopNavBar toggleOpenDrawer={toggleOpenDrawer} />
-        <main className={classes.centercontent}>
+        <main>
           <div className={classes.toolbar} />
           <Switch>
             <Route exact path="/" render={props => <StaffList data={data} />} />

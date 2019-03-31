@@ -1,5 +1,5 @@
-import React from "react";
-import { withStyles } from "@material-ui/styles";
+import React, {useState} from "react";
+import { makeStyles } from "@material-ui/styles";
 import {
   AppBar,
   IconButton,
@@ -13,7 +13,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   flex: {
     textDecoration: "none",
     flexGrow: 1
@@ -34,31 +34,25 @@ const styles = theme => ({
   "navbar:visited": {
     textDecoration: "none"
   }
-});
+}));
 
-class TopNavBar extends React.Component {
-  state = {
-    anchorEl: null,
-    mobileOpen: false
+function TopNavBar({toggleOpenDrawer}) {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    toggleOpenDrawer(!mobileOpen);
+    setMobileOpen(!mobileOpen);
   };
 
-  handleDrawerToggle = () => {
-    this.props.toggleOpenDrawer(!this.state.mobileOpen);
-    // console.log(this.props.toggleOpenDrawer);
-    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+ const handleMenu = event => {
+    setAnchorEl(event.currentTarget);
   };
 
-  handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
-
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  render() {
-    const { anchorEl } = this.state;
-    const { classes } = this.props;
     const open = Boolean(anchorEl);
 
     return (
@@ -67,7 +61,7 @@ class TopNavBar extends React.Component {
           <IconButton
             color="inherit"
             aria-label="Open drawer"
-            onClick={this.handleDrawerToggle}
+            onClick={handleDrawerToggle}
             className={classes.navIconHide}
           >
             <MenuIcon />
@@ -88,7 +82,7 @@ class TopNavBar extends React.Component {
             <IconButton
               aria-owns={open ? "menu-appbar" : null}
               aria-haspopup="true"
-              onClick={this.handleMenu}
+              onClick={handleMenu}
               color="inherit"
             >
               <AccountCircle />
@@ -105,16 +99,15 @@ class TopNavBar extends React.Component {
                 horizontal: "right"
               }}
               open={open}
-              onClose={this.handleMenuClose}
+              onClose={handleMenuClose}
             >
-              <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-              <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+              <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+              <MenuItem onClick={handleMenuClose}>My account</MenuItem>
             </Menu>
           </div>
         </Toolbar>
       </AppBar>
     );
-  }
 }
 
-export default withStyles(styles)(TopNavBar);
+export default TopNavBar;
