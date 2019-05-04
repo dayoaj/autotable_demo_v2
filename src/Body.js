@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/styles";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import {Switch, Route } from "react-router-dom";
 import StaffListUpload from "./StaffListUpload";
 import StaffList from "./StaffList";
 import StaffStatus from "./StaffStatus";
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   content: {
     display: "flex",
     flexGrow: 1,
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
     justifyContent: "center"
   },
   toolbar: theme.mixins.toolbar
@@ -22,7 +22,6 @@ function Body({ data, toggleOpenDrawer }) {
   const classes = useStyles();
 
   return (
-    <Router>
       <div className={classes.content}>
         <TopNavBar toggleOpenDrawer={toggleOpenDrawer} />
         <main>
@@ -40,13 +39,11 @@ function Body({ data, toggleOpenDrawer }) {
           </Switch>
         </main>
       </div>
-    </Router>
+    
   );
 }
 
 Body.propTypes = {
-  classes: PropTypes.object.isRequired,
-  toggleOpenDrawer: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired
 };
 

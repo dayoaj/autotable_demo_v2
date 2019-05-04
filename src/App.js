@@ -1,26 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { ThemeProvider, makeStyles } from "@material-ui/styles";
+import { ThemeProvider } from "@material-ui/styles";
+import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
+import { green, yellow } from "@material-ui/core/colors";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Body from "./Body";
 import ResponsiveNavBar from "./ResponsiveNavBar";
-import { green, yellow } from "@material-ui/core/colors";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { BrowserRouter as Router } from "react-router-dom";
 
+
+const theme = createMuiTheme({
+  palette: {
+    primary: green,
+    secondary: yellow
+  }
+});
 const useStyles = makeStyles({
   root: {
     zIndex: 1,
     overflow: "hidden",
     display: "flex",
-    width: "100%"
+    width: "100%",
+    height: "100vh"
+  },
+  progress: {
+    margin: "0 auto",
+    alignSelf: "center",
+    color: theme.secondary
   }
 });
 
-function App() {
+export default function App() {
   const classes = useStyles();
   const [mobOpen, setMobOpen] = useState(false);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  // const [token, setToken] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,37 +66,37 @@ function App() {
     fetchData();
   }, []);
 
-  const toggleOpenDrawer = mobOpen => {
+  const toggleOpenDrawer = () => {
     setMobOpen(!mobOpen);
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    console.log(hasError);
+    return (
+      <ThemeProvider theme={theme}>
+        <div className={classes.root}>
+          <CircularProgress className={classes.progress} color="secondary" />
+        </div>
+      </ThemeProvider>
+    );
   }
 
   return (
-    <ThemeProvider
-      theme={{
-        palette: {
-          primary: green,
-          secondary: yellow
-        }
-      }}
-    >
+    <ThemeProvider theme={theme}>
       <div className={classes.root}>
         <CssBaseline />
+        <Router>
         <ResponsiveNavBar
           mobOpen={mobOpen}
           toggleOpenDrawer={toggleOpenDrawer}
         />
-        {hasError ? (
-          <div>Something went wrong</div>
-        ) : (
-          <Body toggleOpenDrawer={toggleOpenDrawer} data={data} />
-        )}
+        {/* {hasError ? (
+        <div>Something went wrong</div>
+      ) : ( */}
+        <Body toggleOpenDrawer={toggleOpenDrawer} data={data} />
+        {/* )} */}
+        </Router>
       </div>
     </ThemeProvider>
   );
 }
-
-export default App;

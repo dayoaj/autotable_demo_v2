@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import {
   Table,
@@ -14,26 +14,26 @@ import EnhancedToolbar from "./EnhancedToolbar";
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 2,
     overflowX: "auto"
   },
   table: {
-    minWidth: 700
+    minWidth: 800,
+    [theme.breakpoints.down("sm")]: {
+      minWidth: 200
+    }
   }
 }));
 
 function StaffList({ data }) {
   const classes = useStyles();
   const [selected, setSelected] = useState([]);
+  const [clicked, setClicked] = useState(-1);
 
-  state = { selected: [], clicked: -1 };
-
-  isSelected = EmployeeID => this.state.selected.indexOf(EmployeeID) !== -1;
-  isClicked = EmployeeID => this.state.clicked === EmployeeID;
+  const handleSelected = EmployeeID => selected.indexOf(EmployeeID) !== -1;
+  const handleClicked = EmployeeID => clicked === EmployeeID;
 
   const handleSelect = (event, EmployeeID) => {
-    const { selected, clicked } = this.state;
-
     const selectedIndex = selected.indexOf(EmployeeID);
 
     let newSelected = [];
@@ -43,7 +43,7 @@ function StaffList({ data }) {
     }
     if (!selected.length && clicked !== -1) {
       newSelected = newSelected.concat(selected, EmployeeID, clicked);
-      this.setState({ clicked: -1 });
+      setClicked(-1);
     } else if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, EmployeeID);
     } else if (selectedIndex === 0) {
@@ -57,16 +57,14 @@ function StaffList({ data }) {
       );
     }
 
-    this.setState({ selected: newSelected });
+    setSelected(newSelected);
 
     event.stopPropagation();
   };
 
   const handleClick = (event, EmployeeID) => {
-    const { selected, clicked } = this.state;
-
     if (selected) {
-      this.setState({ selected: [] });
+      setSelected([]);
     }
 
     let newClicked = EmployeeID;
@@ -79,14 +77,14 @@ function StaffList({ data }) {
       newClicked = EmployeeID;
     }
 
-    this.setState({ clicked: newClicked });
+    setClicked(newClicked);
   };
 
   return (
     <Paper className={classes.root} elevation={0}>
       <EnhancedToolbar
-        numSelected={this.state.selected.length}
-        isClicked={this.state.clicked !== -1}
+        numSelected={selected.length}
+        isClicked={clicked !== -1}
       />
       <Table className={classes.table}>
         <TableHead>
@@ -101,8 +99,8 @@ function StaffList({ data }) {
         </TableHead>
         <TableBody>
           {data.map(n => {
-            const isSelected = this.isSelected(n.EmployeeID);
-            const isClicked = this.isClicked(n.EmployeeID);
+            const isSelected = handleSelected(n.EmployeeID);
+            const isClicked = handleClicked(n.EmployeeID);
             return (
               <TableRow
                 hover
@@ -116,7 +114,7 @@ function StaffList({ data }) {
                 <TableCell padding="checkbox">
                   <Checkbox
                     checked={isClicked || isSelected}
-                    onClick={event => this.handleSelect(event, n.EmployeeID)}
+                    onClick={event => handleSelect(event, n.EmployeeID)}
                   />
                 </TableCell>
                 <TableCell component="th" scope="row" padding="none">
@@ -135,9 +133,4 @@ function StaffList({ data }) {
   );
 }
 
-StaffList.propTypes = {
-  classes: PropTypes.object.isRequired,
-  data: PropTypes.array
-};
-
-export default withStyles(styles)(StaffList);
+export default StaffList;
