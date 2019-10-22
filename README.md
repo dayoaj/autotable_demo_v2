@@ -1,5 +1,5 @@
-This a Demo User Interface (UI) for a Staff Overtime Management System.
-Check Life Demo on Codesandbox: 
+This a Demo User Interface (UI) for a Staff Overtime Management System.<br>
+Check Life Demo on Codesandbox: https://wn9r4l6m2l.csb.app/schedule
 
 ## Features
 
